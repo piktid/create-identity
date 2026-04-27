@@ -1,0 +1,11 @@
+{
+  "instructions": [
+    {
+      "prompt": "A 31-year-old woman of mixed South Asian and North European heritage, long jet-black hair parted in the middle and twisted into a loose low bun with a few wisps framing her face, deep brown eyes with faint amber flecks, high cheekbones, a thin straight nose with a small gold septum ring, warm olive skin with a scatter of small beauty marks along the jawline, a faded fine-line geometric tattoo just visible on the left collarbone, natural minimal makeup with a slight matte finish. Her expression is calm and focused, gaze directed slightly off-camera.",
+      "num_variations": 2,
+      "options": {"ar": "3:4", "size": "2K", "format": "jpg"}
+    }
+  ],
+  "options": {"model": "auto"},
+  "name": "Editorial mixed-heritage model"
+}

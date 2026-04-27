@@ -1,0 +1,28 @@
+{
+  "instructions": [
+    {
+      "appearance": {
+        "gender": "female",
+        "age": 28,
+        "ethnicity": "North European",
+        "skin": "light",
+        "build": "slim",
+        "expression": "confident and relaxed"
+      },
+      "face": {
+        "eyes": "pale blue",
+        "eyebrows": "natural arched",
+        "marks": "freckles"
+      },
+      "hair": {
+        "color": "ash blonde",
+        "length": "long",
+        "style": "wavy"
+      },
+      "num_variations": 3,
+      "options": {"ar": "3:4", "size": "2K", "format": "jpg"}
+    }
+  ],
+  "options": {"model": "auto"},
+  "name": "Spring catalog model"
+}
