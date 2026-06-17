@@ -34,7 +34,7 @@ import requests
 class CreateIdentity:
     def __init__(self, base_url, token, brief_path=None, from_image=None,
                  output_folder="output", auto_promote=False, picked_draft=None,
-                 explicit_name=None, num_variations=3, save_brief=None):
+                 explicit_name=None, num_variations=3, save_brief=None, model=None):
         self.base_url = base_url.rstrip("/")
         self.brief_path = Path(brief_path) if brief_path else None
         self.from_image = Path(from_image) if from_image else None
@@ -44,6 +44,9 @@ class CreateIdentity:
         self.explicit_name = explicit_name
         self.num_variations = num_variations
         self.save_brief = Path(save_brief) if save_brief else None
+        # Generation engine. None means "not specified": respect the brief file's
+        # own options.model (if any) and let the backend default to "auto".
+        self.model = model
 
         self.access_token = token
         self.brief = None
@@ -118,6 +121,10 @@ class CreateIdentity:
             print("Brief must contain a non-empty 'instructions' list")
             return False
 
+        # An explicit --model overrides whatever the brief file specifies.
+        if self.model is not None:
+            self.brief.setdefault("options", {})["model"] = self.model
+
         print(f"Loaded brief from {self.brief_path}")
         return True
 
@@ -168,7 +175,7 @@ class CreateIdentity:
               f"{', '.join(sorted(instruction.keys() - {'num_variations', 'options'}))}")
         return {
             "instructions": [instruction],
-            "options": {"model": "auto"},
+            "options": {"model": self.model or "auto"},
             "name": self.explicit_name or f"From {reference_path.stem}",
         }
 
@@ -570,6 +577,15 @@ def main():
              "promotion falls back to the brief's job-level 'name'.",
     )
 
+    parser.add_argument(
+        "--model",
+        choices=["auto", "nano_banana_2", "nano_banana_pro", "seedream", "orbita"],
+        default=None,
+        help="Generation engine: auto | nano_banana_2 | nano_banana_pro | seedream | orbita "
+             "(default: auto). When set, overrides the brief's options.model. Note: 'orbita' "
+             "has tighter constraints (1K output only, no reference images).",
+    )
+
     args = parser.parse_args()
 
     workflow = CreateIdentity(
@@ -583,6 +599,7 @@ def main():
         explicit_name=args.name,
         num_variations=args.variations,
         save_brief=args.save_brief,
+        model=args.model,
     )
 
     success = workflow.run()

@@ -167,7 +167,16 @@ Full reference at the [Create Identity docs](https://docs.piktid.com/docs/v2/con
 
 ## Generation models
 
-By default On-Model picks the best engine for each job (`auto`). You can override the engine in the brief's job-level options:
+By default On-Model picks the best engine for each job (`auto`). You can override the engine with the `--model` flag:
+
+```bash
+$ python create_identity.py \
+  --brief briefs/scandinavian-model.json \
+  --token YOUR_API_TOKEN \
+  --model nano_banana_pro
+```
+
+`--model` overrides the engine for the run (including the brief's own `options.model`, if set). You can also set it directly in the brief's job-level options instead:
 
 ```jsonc
 {
@@ -176,7 +185,7 @@ By default On-Model picks the best engine for each job (`auto`). You can overrid
 }
 ```
 
-Accepted values: `auto`, `nano_banana_pro`, `seedream`, `orbita`. Note that `orbita` has tighter constraints — 1K output only, no reference images, and a reduced aspect-ratio set (no `4:5`, `5:4`, or `21:9`).
+Accepted values: `auto`, `nano_banana_2`, `nano_banana_pro`, `seedream`, `orbita`. Note that `orbita` has tighter constraints — 1K output only, no reference images, and a reduced aspect-ratio set (no `4:5`, `5:4`, or `21:9`).
 
 ## Starting from a reference image
 
@@ -232,6 +241,7 @@ If you want the generator itself to riff on a visual reference (rather than read
 --variations        Number of draft variations when using --from-image (default: 3, max: 8). Ignored with --brief.
 --save-brief        When using --from-image, also save the generated brief JSON to this path.
 --base-url          API base URL (default: https://v2.api.piktid.com)
+--model             Generation engine: auto | nano_banana_2 | nano_banana_pro | seedream | orbita (default: auto). Overrides the brief's options.model.
 --auto-promote      Skip the interactive picker and promote the first completed draft
 --pick              Promote a specific draft by image_result_id (skips the picker)
 --name              Optional explicit name for the promoted identity (otherwise the brief's job-level "name" is used and auto-suffixed on collision)

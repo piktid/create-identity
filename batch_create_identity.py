@@ -37,7 +37,7 @@ from pathlib import Path
 from create_identity import CreateIdentity
 
 
-def process_single_brief(base_url, token, brief_path, output_folder, name=None):
+def process_single_brief(base_url, token, brief_path, output_folder, name=None, model=None):
     """Run one full create-and-promote workflow. Always uses --auto-promote in batch mode."""
     start = time.time()
 
@@ -48,6 +48,7 @@ def process_single_brief(base_url, token, brief_path, output_folder, name=None):
         output_folder=str(output_folder),
         auto_promote=True,
         explicit_name=name,
+        model=model,
     )
 
     success = workflow.run()
@@ -104,6 +105,14 @@ def main():
         default=3,
         help="Number of parallel workers (default: 3, max: 5)",
     )
+    parser.add_argument(
+        "--model",
+        choices=["auto", "nano_banana_2", "nano_banana_pro", "seedream", "orbita"],
+        default=None,
+        help="Generation engine: auto | nano_banana_2 | nano_banana_pro | seedream | orbita "
+             "(default: auto). When set, overrides each brief's options.model. Note: 'orbita' "
+             "has tighter constraints (1K output only, no reference images).",
+    )
 
     args = parser.parse_args()
 
@@ -140,6 +149,8 @@ def main():
                 args.token,
                 brief_path,
                 output_dir / brief_path.stem,
+                None,
+                args.model,
             ): brief_path
             for brief_path in brief_paths
         }
